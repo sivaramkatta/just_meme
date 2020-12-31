@@ -154,3 +154,5 @@ cloudinary.config(
   api_key=env("C_API_KEY"),
   api_secret=env("C_SECRET")
 )
+
+CLOUDINARY_BUCKET = env("C_BUCKET")
