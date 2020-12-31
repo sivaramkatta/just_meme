@@ -18,7 +18,7 @@ class UserSignUp(CreateView):
         return kw
 
     def get_success_url(self):
-        if self.request.get("next"):
+        if self.request.GET.get("next"):
             return self.request.GET["next"]
         else:
             return "/"
