@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="{% static 'css/main-styles.min.css' %}">
+</head>
+   <style>
+@media screen and (min-width: 540px) {
+  .error-inner-container {padding:20px 35px 0px 250px;}
+}
+@media screen and (max-width: 539px) {
+  .error-inner-container {padding:60px 5px 5px 5px;}
+}
+</style>
+<body>
+{% include "side_navigator.html" %}
+<div class="error-inner-container">
+    <h4 style="color:red;">{{msg}}</h4>
+</div>
+</body>
+</html>

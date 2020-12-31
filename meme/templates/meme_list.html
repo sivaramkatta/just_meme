@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Just MeMe</title>
+    <link rel="stylesheet" href="{% static 'css/main-styles.min.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+<body>
+{% include "side_navigator.html" %}
+<div class="infinite-container">
+    {% for meme in memes %}
+    {% include "meme_component.html" %}
+    {% empty %}
+    <h4 style="margin:50px;">No Memes Here...</h4>
+    {% endfor %}
+</div>
+{% if page_obj.has_next %}
+<p class="loading-text" style="text-align:center;">Loading ...</p>
+<a class="infinite-more-link" href="?page={{page_obj.next_page_number}}">More</a>
+{% endif %}
+<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+<script src="{% static 'js/infinite.min.js' %}"></script>
+<script>
+    var is_authenticated = {{user.is_authenticated|yesno:'true,false'}};
+    var infinite = new Waypoint.Infinite({
+        element: document.getElementsByClassName('infinite-container')[0],
+        offset: 'bottom-in-view',
+        onBeforePageLoad: function(){$(".loading-text").show()},
+        onAfterPageLoad: function(){$(".loading-text").hide()}
+    })
+</script>
+<script src="{% static 'js/like_action.js' %}"></script>
+</body>
+</html>

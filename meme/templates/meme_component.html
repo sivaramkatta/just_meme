@@ -1,0 +1,35 @@
+{% load static %}
+<div class="infinite-item" id="meme-component-div">
+    {% load tz %} {% timezone "Asia/Kolkata" %}<p style="margin-bottom:0px;">
+    <p id="meme-category-link">Category: <a href="/category/{{meme.category.slug}}" style="color:brown;">{{meme.category.name}}</a></p>
+    <p style="color:grey;font-size:14px;">{% if meme_detail %}<a href="/user/{{meme.posted_by.username}}"><img src="{% static 'images/profile-pic.png' %}" id="small-img-pp">{% if user.id == meme.posted_by.id %}You {% else %}{{meme.posted_by.username}}{% endif %}</a> on {% endif%}{{meme.created| date:"M d, G:i"}}</p>{% endtimezone %}
+    {% if meme_detail %}<div style="display:flex; justify-content:center;"><img src={{meme.meme_image}} id="meme-comp-img"></div>
+    {% else %}<a href="/meme/{{meme.id}}" id="meme-comp-link"><img id="meme-comp-img-detail" src={{meme.meme_image}}></a> {% endif %}
+    <p style="font-size:20px;">{{meme.description}}</p>
+    <div style="display:flex;align-items: baseline;">
+        <div id="actual-action-{{meme.id}}">
+            {% if meme.has_liked %}
+            <button class="btn btn-primary" onclick="action(event, {{meme.id}}, 'actual','liked')">Liked</button>
+            {% else %}
+            <button class="btn btn-secondary" onclick="action(event, {{meme.id}}, 'actual','like')">Like</button>
+            {% endif %}
+        </div>
+        <div id="fake-liked-action-{{meme.id}}" class="fake-button-container">
+            <button class="btn btn-primary" id="fake-liked-{{meme.id}}" onclick="action(event, {{meme.id}}, 'fake','liked')">
+                Liked
+            </button>
+        </div>
+        <div id="fake-like-action-{{meme.id}}" class="fake-button-container">
+            <button class="btn btn-secondary" id="fake-like-{{meme.id}}" onclick="action(event, {{meme.id}}, 'fake','like')">
+                Like
+            </button>
+        </div>
+        <p id="like-count-{{meme.id}}" style="margin-left:12px;">{{meme.likes}} likes</p>
+        <p style="margin-left:12px;">{{meme.comments}} comments</p></div>
+        {% if meme_detail and user.id == meme.posted_by.id %}
+        <button class="btn btn-danger" id="modal-btn" style="float:right;margin-top:-45px;" onclick="open_modal()">Delete</button>
+        {% endif %}
+    {% if meme_detail and meme.tags %}<div style="display:flex;"><p id="tags-title">Tags: </p>{% for tag in meme.tags %}
+    <a href="/tag/{{tag}}"><p id="tags-link"><i>{{tag}}</i></p></a>
+            {% endfor %}</div>{% endif %}
+</div>

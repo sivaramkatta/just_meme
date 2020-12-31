@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meme Detail</title>
+    <link rel="stylesheet" href="{% static 'css/main-styles.min.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+</head>
+<body>
+{% include "side_navigator.html" %}
+<div class="meme-list-inner-container">
+    {% include "meme_component.html" with meme_detail=True %}
+    {% if user.is_authenticated %}
+    <div style="display:flex;">
+        <input type="text" id="comment-input" maxlength="500" placeholder="Comment here..." name="comment">
+        <button type="button" onclick="handle_comment()" class="btn btn-dark" style="height:35px;margin-left:15px;">Submit</button>
+    </div>
+    {% endif %}
+    {% for comment in meme.comments_list %}
+    <div class="comment-container" id="comment-div">
+        <div style="display:flex; align-items:center;">
+            <a href="/user/{{comment.user.username}}" id="small-profile-link">
+                <img id="pp-img" src="{% static 'images/profile-pic.png' %}">{% if user.id == comment.user.id %}You{% else %}{{comment.user.username}} {% endif %}</a>
+            {% load tz %} {% timezone "Asia/Kolkata" %}<p id="meme-detail-time-created">
+            {{comment.created | date:"M d, G:i"}}</p>{% endtimezone %}
+        </div>
+        <p style="font-size:14px;margin:5px;">{{comment.comment}}</p>
+    </div>
+    {% endfor %}
+</div>
+<div class="modal" id="delete-modal-container">
+    <div class="modal-content" id="delete-modal-div">
+        <p style="font-size:20px;">Are you sure about deleting meme?</p>
+        <div>
+            <button class="btn btn-secondary close-btn" onclick="close_modal()">Close</button>
+            <button class="btn btn-primary delete-btn" onclick="delete_modal()" id="delete-btn">Delete</button>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+var is_authenticated = {{user.is_authenticated|yesno:'true,false'}};
+
+async function commentAPI(comment){
+    let response = await fetch('/meme/{{meme.id}}/comment/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({"comment":comment})
+    });
+    let result = await response.json();
+    if(result.success){window.location.href="/meme/{{meme.id}}"}
+}
+
+function handle_comment(){
+    comment = document.getElementById("comment-input")
+    if(comment.value){
+        commentAPI(comment.value)
+    }
+}
+
+function open_modal(){
+    let modal = document.querySelector(".modal");
+    modal.style.display = "block";
+}
+
+function close_modal(){
+    let modal = document.querySelector(".modal")
+    modal.style.display = "none";
+}
+
+async function deleteAPI(comment){
+    let response = await fetch('/meme/{{meme.id}}/delete/', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+    });
+    let result = await response.json();
+    if(result.success){
+        window.location.href="/";
+    }else{
+        e=document.getElementById("delete-btn");
+        e.disabled = false;
+        e.innerHTML="Delete"
+    }
+}
+
+function delete_modal(){
+    e=document.getElementById("delete-btn");
+    e.disabled = true;
+    e.innerHTML="Loading..."
+    deleteAPI()
+}
+</script>
+<script src="{% static 'js/like_action.js' %}"></script>
+</html>

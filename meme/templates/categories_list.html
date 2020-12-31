@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
+    <link rel="stylesheet" href="{% static 'css/main-styles.min.css' %}">
+</head>
+<body>
+{% include "side_navigator.html" %}
+<div class="category-inner-container">
+    <h2>Categories</h2>
+    <div id="categories-list-div">{% for category in categories %}
+        <a id="category-link" href="/category/{{category.slug}}/">
+            <div id="category-text-div"><p style="font-size:22px;margin:0px;">{{category.name}}</p></div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% load static %}
+<div id="desktops" class="desktop-container">
+    <div class="sidebar-logo-dekstops">Just MeMe</div>
+    <div id="sidebar-links-desktops">
+        <a href="/" class="nav-list"><img class="side-nav-link-img" src="{% static 'images/home.png' %}">Home</a>
+        <a href="/categories" class="nav-list"><img src="{% static 'images/category.png' %}" class="side-nav-link-img">Categories</a>
+        <a href="/search" class="nav-list"><img src="{% static 'images/search.png' %}" class="side-nav-link-img">Search</a>
+        <a href="/upload" class="nav-list"><img src="{% static 'images/upload.png' %}" class="side-nav-link-img">Upload</a>
+        <a href="/profile" class="nav-list"><img src="{% static 'images/profile.png' %}" class="side-nav-link-img">Profile</a>
+    </div>
+</div>
+<div id="mobiles" class="mobiles-container">
+    <div class="sidebar-logo" style="background:#1a1a1a;width:100%;">
+        <div style="display:flex;">
+            <a onclick="handle_hamburger()" style="padding-top:11px;padding-left:8px;">
+                <img src="{% static 'images/hamburger.png' %}" id="hamburger-img">
+            </a>
+            <p id="mobile-title">Just MeMe</p>
+        </div>
+    </div>
+    <div id="hamburger-menu" style="display:none;">
+        <a href="/" class="nav-list"><img src="{% static 'images/home.png' %}" class="side-nav-link-img">Home</a>
+        <a href="/categories" class="nav-list"><img src="{% static 'images/category.png' %}" class="side-nav-link-img">Categories</a>
+        <a href="/search" class="nav-list"><img src="{% static 'images/search.png' %}" class="side-nav-link-img">Search</a>
+         <a href="/upload" class="nav-list"><img src="{% static 'images/upload.png' %}" class="side-nav-link-img">Upload</a>
+        <a href="/profile" class="nav-list"><img src="{% static 'images/profile.png' %}" class="side-nav-link-img">Profile</a>
+    </div>
+</div>
+<script>
+    function handle_hamburger() {
+        var e = document.getElementById("hamburger-menu");
+        if (e.style.display === "none") {
+            e.style.display = "flex";
+        }
+        else {
+            e.style.display = "none";
+        }
+    }
+</script>

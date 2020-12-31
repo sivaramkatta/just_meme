@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link rel="stylesheet" href="{% static 'css/main-styles.min.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+</head>
+<body>
+{% include "side_navigator.html" %}
+<div class="meme-list-inner-container">
+    <div style="display:flex;">
+        <input type="text" id="search-text-input" maxlength="500" placeholder="Search by tag ex: Latest" name="comment" oninput="handle_search(event)">
+    </div>
+    <div id="search-result"></div>
+</div>
+</body>
+<script>
+let debounced_func=debounce( searchTagAPI, 1000 )
+
+function getCookie(name) {
+   var cookieValue = null;
+   if (document.cookie && document.cookie != '') {
+     var cookies = document.cookie.split(';');
+     for (var i = 0; i < cookies.length; i++) {
+       var cookie = jQuery.trim(cookies[i]);
+       if (cookie.substring(0, name.length + 1) == (name + '=')) {
+         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+         break;
+       }
+     }
+   }
+   return cookieValue;
+}
+
+async function searchTagAPI(input){
+    let response = await fetch('/search/tags/?q='+input, {
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+    });
+    let result = await response.json();
+    if(result.tags){
+        handleResult(result.tags)
+    }else{
+        e=document.getElementById("search-result").innerHTML="<h5 style='margin:50px;'>0 Tags found...</h5>"
+    }
+}
+
+function handle_search(event){
+   if(event.target.value){
+      debounced_func(event.target.value);
+   }else{
+    e=document.getElementById("search-result").innerHTML=""
+   }
+}
+
+function handleResult(res){
+    if(res.length>0){
+        e=document.getElementById("search-result");
+        child = "";
+        for (let i of res){
+            child=child + "<a style='text-decoration:none;color:black;margin:10px;' href=/tag/"+encodeURI(i)+"/><div style='border:2px solid grey; border-radius:5px;padding:10px;'><p style=font-size:22px;text-align:center;margin:0px;>"+i+"</p></div></a>"
+        }
+        e.innerHTML = "<div style=display:flex;flex-wrap:wrap;margin-top:18px;>"+child+"</div>";
+    }else{
+    e=document.getElementById("search-result").innerHTML="<h5 style='margin:50px;'>0 Tags found...</h5>"
+    }
+}
+
+function debounce (fn, delay) {
+  let timeOutId;
+  return function(...args) {
+    if(timeOutId) {
+      clearTimeout(timeOutId);
+    }
+    timeOutId = setTimeout(() => {
+      fn(...args);
+    },delay);
+  }
+}
+</script>
+</html>
