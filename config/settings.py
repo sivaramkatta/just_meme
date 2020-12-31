@@ -31,10 +31,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = bool(env('DEBUG'))
 
-ALLOWED_HOSTS = ["just-meme.herokuapp.com", "192.168.0.108"]
-
+ALLOWED_HOSTS = [env('HOST')]
 
 # Application definition
 
