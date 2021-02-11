@@ -17,6 +17,8 @@
         <input type="text" id="comment-input" maxlength="500" placeholder="Comment here..." name="comment">
         <button type="button" onclick="handle_comment()" class="btn btn-dark" style="height:35px;margin-left:15px;">Submit</button>
     </div>
+    {% else %}
+    <p style="font-size:14px;color:grey;margin-left:50px;"><a href="/login">Login</a> to comment</p>
     {% endif %}
     {% for comment in meme.comments_list %}
     <div class="comment-container" id="comment-div">
@@ -28,6 +30,8 @@
         </div>
         <p style="font-size:14px;margin:5px;">{{comment.comment}}</p>
     </div>
+    {% empty %}
+    <p style="font-size:18px;margin:5px;color:grey;margin-left:50px;">No Comments yet...</p>
     {% endfor %}
 </div>
 <div class="modal" id="delete-modal-container">
