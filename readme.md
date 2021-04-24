@@ -1,5 +1,5 @@
 # just_meme
-This is backend repo for meme sharing application built using Django
+Repo for meme sharing application built using Django
 ## Production URL
 ```
 https://just-meme.herokuapp.com/
